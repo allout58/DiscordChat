@@ -4,8 +4,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.shadowfacts.discordchat.client.ClientSetupHandler;
+import net.shadowfacts.discordchat.commands.CommandWho;
 import net.shadowfacts.discordchat.discord.DiscordThread;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,6 +36,8 @@ public class DiscordChat {
 				MinecraftForge.EVENT_BUS.register(new ClientSetupHandler());
 			}
 		}
+
+		DCCommands.getInstance().registerCommand("who", new CommandWho());
 	}
 
 	@Mod.EventHandler
@@ -47,6 +51,10 @@ public class DiscordChat {
 			DCConfig.enabled = false;
 		}
 
+	}
+
+	public void serverStopping(FMLServerStoppingEvent event) {
+		DiscordThread.instance.jda.shutdown();
 	}
 
 }
