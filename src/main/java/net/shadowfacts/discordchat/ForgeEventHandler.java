@@ -17,45 +17,45 @@ public class ForgeEventHandler {
 
 	@SubscribeEvent
 	public void serverChat(ServerChatEvent event) {
-		if (DCConfig.enabled && !MiscUtils.isMessageFromDiscord(event.message)) {
-			DiscordThread.instance.sendMessageToAllChannels(MiscUtils.toDiscordMessage(event.username, event.message));
+		if (DCConfig.enabled && !MiscUtils.isMessageFromDiscord(event.getComponent().getUnformattedText())) {
+			DiscordThread.instance.sendMessageToAllChannels(MiscUtils.toDiscordMessage(event.getUsername(), event.getMessage()));
 		}
 	}
 
 	@SubscribeEvent
 	public void onPlayerDeath(LivingDeathEvent event) {
-		if (DCConfig.sendPlayerDeathMessages) {
-			if (event.entityLiving instanceof EntityPlayer) {
-				DiscordThread.instance.sendMessageToAllChannels(MiscUtils.createDiscordDeathMessage((EntityPlayer)event.entityLiving));
+		if (DCConfig.enabled && DCConfig.sendPlayerDeathMessages) {
+			if (event.getEntityLiving() instanceof EntityPlayer) {
+				DiscordThread.instance.sendMessageToAllChannels(MiscUtils.createDiscordDeathMessage((EntityPlayer)event.getEntityLiving()));
 			}
 		}
 	}
 
 	@SubscribeEvent
 	public void onPlayerRecieveAchievement(AchievementEvent event) {
-		if (DCConfig.sendPlayerAchievementMessages) {
-			if (event.entityPlayer instanceof EntityPlayerMP) {
-				if (((EntityPlayerMP) event.entityPlayer).getStatFile().hasAchievementUnlocked(event.achievement)) {
+		if (DCConfig.enabled && DCConfig.sendPlayerAchievementMessages) {
+			if (event.getEntityPlayer() instanceof EntityPlayerMP) {
+				if (((EntityPlayerMP) event.getEntityPlayer()).getStatFile().hasAchievementUnlocked(event.getAchievement())) {
 					return;
 				}
-				if (!((EntityPlayerMP) event.entityPlayer).getStatFile().canUnlockAchievement(event.achievement)) {
+				if (!((EntityPlayerMP) event.getEntityPlayer()).getStatFile().canUnlockAchievement(event.getAchievement())) {
 					return;
 				}
-				DiscordThread.instance.sendMessageToAllChannels(MiscUtils.createAchievementMessage(event.entityPlayer, event.achievement));
+				DiscordThread.instance.sendMessageToAllChannels(MiscUtils.createAchievementMessage(event.getEntityPlayer(), event.getAchievement()));
 			}
 		}
 	}
 
 	@SubscribeEvent
 	public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-		if (DCConfig.sendPlayerJoinLeaveMessages) {
+		if (DCConfig.enabled && DCConfig.sendPlayerJoinLeaveMessages) {
 			DiscordThread.instance.sendMessageToAllChannels(MiscUtils.createLoggedInMessage(event.player));
 		}
 	}
 
 	@SubscribeEvent
 	public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
-		if (DCConfig.sendPlayerJoinLeaveMessages) {
+		if (DCConfig.enabled && DCConfig.sendPlayerJoinLeaveMessages) {
 			DiscordThread.instance.sendMessageToAllChannels(MiscUtils.createLoggedOutMessage(event.player));
 		}
 	}

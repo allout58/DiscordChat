@@ -7,13 +7,13 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath "net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT"
+		classpath "net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT"
 	}
 }
 
 plugins {
 	id "com.matthewprenger.cursegradle" version "1.0.6"
-	id "com.github.johnrengelman.shadow" version "1.2.2"
+	id "com.github.johnrengelman.shadow" version "1.2.3"
 }
 
 apply plugin: "net.minecraftforge.gradle.forge"
@@ -56,7 +56,7 @@ repositories {
 dependencies {
 	compile group: "net.shadowfacts", name: "ShadowMC", version: mc_version + "-" + shadowmc_version
 
-	compile group: "net.dv8tion", name: "JDA", version: "1.2.2_167", classifier: "withDependencies"
+	compile group: "net.dv8tion", name: "JDA", version: "2.0.0_242", classifier: "withDependencies"
 }
 
 shadowJar {
@@ -79,7 +79,7 @@ shadowJar {
 	relocate "org.apache.commons.logging", "net.shadowfacts.discordchat.repack.org.apache.commons.logging"
 
 	dependencies {
-		include(dependency("net.dv8tion:JDA:1.2.2_167:withDependencies"))
+		include(dependency("net.dv8tion:JDA:2.0.0_242:withDependencies"))
 	}
 }
 
@@ -89,8 +89,7 @@ curseforge {
 	project {
 		id = "240995"
 
-		addGameVersion "1.8.8"
-		addGameVersion "1.8.9"
+		addGameVersion "1.9"
 		addGameVersion "Java 8"
 
 		mainArtifact(shadowJar) {
